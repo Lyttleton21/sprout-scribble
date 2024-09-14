@@ -12,9 +12,9 @@ export default async function Nav() {
   return (
     <header className=" py-8">
       <nav>
-        <ul className="flex justify-between">
+        <ul className="flex justify-between items-center">
           <li>
-            <Link href={"/"}>
+            <Link href={"/"} aria-label="Logo">
               <Image src={logo} alt={"Logo"} width={150} height={10} />
             </Link>
           </li>
