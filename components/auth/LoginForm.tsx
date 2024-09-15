@@ -1,6 +1,22 @@
 "use client";
 
+import { Input } from "@/components/ui/input";
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+} from "@/components/ui/input-otp";
+import { cn } from "@/lib/utils";
+import { EmailSignIn } from "@/server/action/auth/EmailSignIn";
+import LoginSchema from "@/types/login-schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useAction } from "next-safe-action/hooks";
+import Link from "next/link";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { Button } from "../ui/button";
 import {
   Form,
   FormControl,
@@ -11,18 +27,8 @@ import {
   FormMessage,
 } from "../ui/form";
 import AuthCard from "./AuthCard";
-import * as z from "zod";
-import LoginSchema from "@/types/login-schema";
-import { Input } from "@/components/ui/input";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "../ui/button";
-import { cn } from "@/lib/utils";
-import Link from "next/link";
-import { EmailSignIn } from "@/server/action/auth/EmailSignIn";
-import { useAction } from "next-safe-action/hooks";
 import FormError from "./form-error";
 import FormSuccess from "./form-success";
-import { useState } from "react";
 
 export default function LoginForm() {
   const [error, setError] = useState<string>("");
@@ -41,73 +47,114 @@ export default function LoginForm() {
     onSuccess(data) {
       if (data?.error) setError(data.error);
       if (data?.Success) setSuccess(data.Success);
-      // if (data.twoFactor) setShowTwoFactor(true);
+      if (data.twoFactor) setShowTwoFactor(true);
     },
   });
 
-  const onSubmitForm = (value: z.infer<typeof LoginSchema>) => {
-    // console.log(value);
+  const onSubmit = (value: z.infer<typeof LoginSchema>) => {
+    // console.log(value);🎉
     execute(value);
   };
   return (
     <AuthCard
-      cardTitle={"Welcome Back 🎉"}
-      backButtonhref={"/auth/register"}
-      backButtonLabel={"Create a New Account"}
+      cardTitle="Welcome back 🎉"
+      backButtonhref="/auth/register"
+      backButtonLabel="Create a new account"
       showSocial
     >
       <div>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmitForm)}>
-            <>
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        placeholder="abc@email.com"
-                        type="email"
-                        autoComplete="email"
-                      />
-                    </FormControl>
-                    <FormDescription />
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="*****" type="password" />
-                    </FormControl>
-                    <FormDescription />
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </>
-            <FormSuccess message={success} />
-            <FormError message={error} />
-            <Button asChild variant={"link"} size={"sm"}>
-              <Link href={"/auth/reset"}>Forget Password?</Link>
-            </Button>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <div>
+              {showTwoFactor && (
+                <FormField
+                  control={form.control}
+                  name="code"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>
+                        We&apos;ve sent you a two factor code to your email.
+                      </FormLabel>
+                      <FormControl>
+                        <InputOTP
+                          disabled={status === "executing"}
+                          {...field}
+                          maxLength={6}
+                        >
+                          <InputOTPGroup>
+                            <InputOTPSlot index={0} />
+                            <InputOTPSlot index={1} />
+                            <InputOTPSlot index={2} />
+                          </InputOTPGroup>
+                          <InputOTPSeparator />
+                          <InputOTPGroup>
+                            <InputOTPSlot index={3} />
+                            <InputOTPSlot index={4} />
+                            <InputOTPSlot index={5} />
+                          </InputOTPGroup>
+                        </InputOTP>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
+              {!showTwoFactor && (
+                <>
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email</FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            placeholder="abc@gmail.com"
+                            type="email"
+                            autoComplete="email"
+                          />
+                        </FormControl>
+                        <FormDescription />
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Password</FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            placeholder="*********"
+                            type="password"
+                            autoComplete="current-password"
+                          />
+                        </FormControl>
+                        <FormDescription />
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </>
+              )}
+              <FormSuccess message={success} />
+              <FormError message={error} />
+              <Button size={"sm"} className="px-0" variant={"link"} asChild>
+                <Link href="/auth/reset">Forgot your password</Link>
+              </Button>
+            </div>
             <Button
+              type="submit"
               className={cn(
-                "w-full my-2",
+                "w-full my-4",
                 status === "executing" ? "animate-pulse" : ""
               )}
-              type="submit"
             >
-              {/* {showTwoFactor ? "Verify" : "Sign In"} */}
-              Sign In
+              {showTwoFactor ? "Verify" : "Sign In"}
             </Button>
           </form>
         </Form>

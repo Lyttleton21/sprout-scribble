@@ -1,6 +1,6 @@
 "use client";
 
-import { newVerification } from "@/server/action/tokens";
+import { newEmailVerification } from "@/server/action/tokens";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
@@ -22,7 +22,7 @@ export const EmailVerificationForm = () => {
       setError("Token not Found");
       return;
     }
-    newVerification(token).then((data) => {
+    newEmailVerification(token).then((data) => {
       if (data?.error) {
         setError(data.error);
       }
