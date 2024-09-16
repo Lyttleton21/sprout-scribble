@@ -30,7 +30,7 @@ export default async function DashboardLayout({
   ] as const;
 
   const adminLinks =
-    session?.user.role === "ADMIN"
+    session?.user.role === "admin"
       ? [
           {
             label: "Analytics",
@@ -50,7 +50,7 @@ export default async function DashboardLayout({
         ]
       : [];
 
-  // console.log(session?.user);
+  // console.log("ROLE:::", session?.user.role);
 
   const allLinks = [...adminLinks, ...userLinks];
 
