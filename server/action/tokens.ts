@@ -7,15 +7,14 @@ import { emailTokens, passwordResetTokens, twoFactorTokens, users } from '../sch
 
 // Reading from the email_token model if the provide email exists
 export const getVerificationTokenByEmail = async (email: string) => {
-    try {
-        const verificationToken = await db.query.emailTokens.findFirst({
-            where: eq(emailTokens.token, email),
-        })
-        return verificationToken;
-    } catch (error) {
-        console.log(error);
-        return;
-    }
+  try {
+    const verificationToken = await db.query.emailTokens.findFirst({
+      where: eq(emailTokens.token, email),
+    })
+    return verificationToken
+  } catch (error) {
+    return null
+  }
 }
 
 // creating a verification token
@@ -58,32 +57,27 @@ export const newEmailVerification = async (token: string) => {
     try {
         console.log("TOKEN!!!!!!!!!",token);
         
-        // check if token is valid
-        const existingToken = await checkEmailToken(token);
-        if(!existingToken) return {error: 'Something Went Wrong While Verifing Token!!! Please Try Again'};
+        const existingToken = await getVerificationTokenByEmail(token)
+        if (!existingToken) return { error: "Token not found" }
 
-        // check if token has expired 
-        const hasExpires = new Date(existingToken.expires) < new Date();
-        if(hasExpires) return {error: "Token has Expires"};
-
-        // checking if Email exist
+        const hasExpired = new Date(existingToken.expires) < new Date()
+        if (hasExpired) return { error: "Token has expired" }
+      
         const existingUser = await db.query.users.findFirst({
-            where: eq(users.email, existingToken.email)
-        });
-        if(!existingUser) return {error: "Email does not exist"};
-
-        // Verify the Email address
-        await db.update(users).set({
+          where: eq(users.email, existingToken.email),
+        })
+        if (!existingUser) return { error: "Email does not exist" }
+      
+        await db
+          .update(users)
+          .set({
             emailVerified: new Date(),
-            email: existingToken.email
-        });
-
-        // Delete the existing token
-        await db.delete(emailTokens).where(
-            eq(emailTokens.id, existingToken.id)
-        );
-
-        return {success: "Email is Verified"};
+            email: existingToken.email,
+          })
+          .where(eq(users.id, existingUser.id))
+      
+        await db.delete(emailTokens).where(eq(emailTokens.id, existingToken.id))
+        return { success: "Email Verified" }
 
     } catch (error) {
         console.log(error);
