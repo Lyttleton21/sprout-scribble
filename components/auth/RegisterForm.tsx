@@ -46,6 +46,7 @@ export default function RegisterForm() {
       email: "",
       password: "",
     },
+    mode: "onBlur",
   });
 
   return (
