@@ -26,8 +26,14 @@ import { Input } from "@/components/ui/input";
 import { DollarSign } from "lucide-react";
 import Tiptap from "./tiptap";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useAction } from "next-safe-action/hooks";
+import { CreateProduct } from "@/server/action/products/create-product";
+import { useRouter, useSearchParams } from "next/navigation";
+import { toast } from "sonner";
 
 export default function ProductForm() {
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof ProductSchema>>({
     resolver: zodResolver(ProductSchema),
     defaultValues: {
@@ -38,10 +44,29 @@ export default function ProductForm() {
     mode: "onBlur",
   });
 
-  const onSubmit = (value: z.infer<typeof ProductSchema>) => {
-    console.log(value);
-    // execute(value);
-  };
+  const { execute, status } = useAction(CreateProduct, {
+    onSuccess: (data) => {
+      if (data?.error) {
+        toast.error(data.error);
+      }
+      if (data?.success) {
+        router.push("/dashboard/products");
+        toast.success(data.success);
+      }
+    },
+    onExecute: (data) => {
+      // if (editMode) {
+      //   toast.loading("Editing Product")
+      // }
+      // if (!editMode) {
+      toast.loading("Creating Product");
+      // }
+    },
+  });
+
+  async function onSubmit(value: z.infer<typeof ProductSchema>) {
+    execute(value);
+  }
 
   return (
     <Card>
@@ -105,11 +130,7 @@ export default function ProductForm() {
             />
             <Button
               className="w-full"
-              disabled={
-                status === "executing" ||
-                !form.formState.isValid ||
-                !form.formState.isDirty
-              }
+              disabled={status === "executing" || !form.formState.isValid}
               type="submit"
             >
               {/* {editMode ? "Save Changes" : "Create Product"} */}
