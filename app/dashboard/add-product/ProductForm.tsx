@@ -1,7 +1,7 @@
 "use client";
 
 import { ProductSchema } from "@/types/product-schema";
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import {
@@ -30,9 +30,37 @@ import { useAction } from "next-safe-action/hooks";
 import { CreateProduct } from "@/server/action/products/create-product";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
+import { GetProduct } from "@/server/action/products/get-product";
 
 export default function ProductForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const editMode = searchParams.get("id");
+
+  const checkProduct = async (id: number) => {
+    if (editMode) {
+      const data = await GetProduct(id);
+      if (data.error) {
+        toast.error(data.error);
+        router.push("/dashboard/products");
+        return;
+      }
+      if (data.success) {
+        const id = editMode;
+        const { title, price, description } = data.success;
+        form.setValue("title", title);
+        form.setValue("price", price);
+        form.setValue("description", description);
+        form.setValue("id", id);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (editMode) {
+      checkProduct(parseInt(editMode));
+    }
+  }, []);
 
   const form = useForm<z.infer<typeof ProductSchema>>({
     resolver: zodResolver(ProductSchema),
@@ -55,12 +83,18 @@ export default function ProductForm() {
       }
     },
     onExecute: (data) => {
-      // if (editMode) {
-      //   toast.loading("Editing Product")
-      // }
-      // if (!editMode) {
-      toast.loading("Creating Product");
-      // }
+      const promise = () =>
+        new Promise<void>((resolve) => setTimeout(() => resolve(), 2000));
+      if (editMode) {
+        toast.promise(promise, {
+          loading: "Editing Product...",
+        });
+      }
+      if (!editMode) {
+        toast.promise(promise, {
+          loading: "Creating Product...",
+        });
+      }
     },
   });
 
@@ -71,8 +105,7 @@ export default function ProductForm() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Card Title</CardTitle>
-        <CardDescription>Card Description</CardDescription>
+        <CardTitle>{editMode ? "Edit Mode" : "Create Mode"}</CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -133,8 +166,7 @@ export default function ProductForm() {
               disabled={status === "executing" || !form.formState.isValid}
               type="submit"
             >
-              {/* {editMode ? "Save Changes" : "Create Product"} */}
-              Create Product
+              {editMode ? "Save Changes" : "Create Product"}
             </Button>
           </form>
         </Form>
