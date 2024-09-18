@@ -7,6 +7,9 @@ import { DataTable } from "./data-table";
 import { columns } from "./column";
 
 export default async function page() {
+  const session = await auth();
+  if (session?.user.role !== "admin") redirect("/dashboard/settings");
+
   const products = await db.query.products.findMany({
     with: {
       productVariants: { with: { variantImages: true, variantTags: true } },
