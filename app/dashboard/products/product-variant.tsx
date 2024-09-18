@@ -91,7 +91,11 @@ export const ProductVariant = ({
 
   const { execute, status } = useAction(createVariant, {
     onExecute() {
-      toast.loading("Creating variant...", { duration: 1 });
+      const promise = () =>
+        new Promise<void>((resolve) => setTimeout(() => resolve(), 2000));
+      toast.promise(promise, {
+        loading: "Creating Variant...",
+      });
       setOpen(false);
     },
     onSuccess(data) {
@@ -106,7 +110,11 @@ export const ProductVariant = ({
 
   const variantAction = useAction(DeleteVariant, {
     onExecute() {
-      toast.loading("Deleting variant", { duration: 1 });
+      const promise = () =>
+        new Promise<void>((resolve) => setTimeout(() => resolve(), 2000));
+      toast.promise(promise, {
+        loading: "Deleting Variant...",
+      });
       setOpen(false);
     },
     onSuccess(data) {

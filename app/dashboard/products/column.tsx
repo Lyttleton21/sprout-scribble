@@ -15,7 +15,6 @@ import {
 import { ColumnDef, Row } from "@tanstack/react-table";
 
 import { Button } from "@/components/ui/button";
-import { DeleteProduct } from "@/server/action/products/delete-product";
 import { MoreHorizontal, PlusCircle } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import Image from "next/image";
@@ -23,6 +22,7 @@ import Link from "next/link";
 import { toast } from "sonner";
 import { VariantsWithImagesTags } from "@/lib/infer-type";
 import { ProductVariant } from "./product-variant";
+import { deleteProduct } from "@/server/action/products/delete-product";
 
 type productColumn = {
   id: number;
@@ -33,7 +33,7 @@ type productColumn = {
 };
 
 const ActionCell = ({ row }: { row: Row<productColumn> }) => {
-  const { status, execute } = useAction(DeleteProduct, {
+  const { execute } = useAction(deleteProduct, {
     onSuccess: (data) => {
       if (data?.error) {
         toast.error(data.error);
@@ -43,7 +43,11 @@ const ActionCell = ({ row }: { row: Row<productColumn> }) => {
       }
     },
     onExecute: () => {
-      toast.loading("Deleting Product...", { duration: 1 });
+      const promise = () =>
+        new Promise<void>((resolve) => setTimeout(() => resolve(), 2000));
+      toast.promise(promise, {
+        loading: "Deleting Product...",
+      });
     },
   });
   const product = row.original;

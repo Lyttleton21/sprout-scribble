@@ -51,7 +51,7 @@ const settings = action(SettingsSchema, async(values) => {
     .where(eq(users.id, dbUser.id));
 
   revalidatePath("/dashboard/settings")
-  return { success: "Settings updated" }
+  return { success: "Account updated Successfully" }
 });
 
 export default settings;
