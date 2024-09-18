@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -8,28 +9,27 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import VariantSchema from "@/types/variant-schema";
-import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useAction } from "next-safe-action/hooks";
-import { toast } from "sonner";
 import { VariantsWithImagesTags } from "@/lib/infer-type";
+import { createVariant } from "@/server/action/products/create-variant";
+import { DeleteVariant } from "@/server/action/products/delete-variant";
+import VariantSchema from "@/types/variant-schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useAction } from "next-safe-action/hooks";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
 import { InputTags } from "./input-tag";
 import VariantImages from "./variant-image";
-import { useEffect, useState } from "react";
-import { createVariant } from "@/server/action/products/create-variant";
 
 type VariantProps = {
   children: React.ReactNode;
@@ -91,11 +91,22 @@ export const ProductVariant = ({
 
   const { execute, status } = useAction(createVariant, {
     onExecute() {
-      const promise = () =>
-        new Promise<void>((resolve) => setTimeout(() => resolve(), 2000));
-      toast.promise(promise, {
-        loading: "Creating variant...",
-      });
+      toast.loading("Creating variant...", { duration: 1 });
+      setOpen(false);
+    },
+    onSuccess(data) {
+      if (data?.error) {
+        toast.error(data.error);
+      }
+      if (data?.success) {
+        toast.success(data.success);
+      }
+    },
+  });
+
+  const variantAction = useAction(DeleteVariant, {
+    onExecute() {
+      toast.loading("Deleting variant", { duration: 1 });
       setOpen(false);
     },
     onSuccess(data) {
@@ -180,10 +191,10 @@ export const ProductVariant = ({
                 <Button
                   variant={"destructive"}
                   type="button"
-                  // disabled={variantAction.status === "executing"}
+                  disabled={variantAction.status === "executing"}
                   onClick={(e) => {
                     e.preventDefault();
-                    // variantAction.execute({ id: variant.id })
+                    variantAction.execute({ id: variant.id });
                   }}
                 >
                   Delete Variant

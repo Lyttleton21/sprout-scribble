@@ -43,11 +43,7 @@ const ActionCell = ({ row }: { row: Row<productColumn> }) => {
       }
     },
     onExecute: () => {
-      const promise = () =>
-        new Promise<void>((resolve) => setTimeout(() => resolve(), 2000));
-      toast.promise(promise, {
-        loading: "Deleting variant...",
-      });
+      toast.loading("Deleting Product...", { duration: 1 });
     },
   });
   const product = row.original;
