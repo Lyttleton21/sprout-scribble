@@ -21,30 +21,16 @@ import { useAction } from "next-safe-action/hooks";
 import Image from "next/image";
 import Link from "next/link";
 import { toast } from "sonner";
-// import { ProductVariant } from "./product-variant";
+import { VariantsWithImagesTags } from "@/lib/infer-type";
+import { ProductVariant } from "./product-variant";
 
 type productColumn = {
   id: number;
   title: string;
   image: string;
   price: number;
-  variants: any;
+  variants: VariantsWithImagesTags[];
 };
-
-export type VariantsWithImagesTags = {
-  id: number;
-  ProductType: String;
-  Color: any;
-  updatedAt: Date;
-  ProductId: string;
-};
-
-// async function DeleteProductWrapper(id: string) {
-//   const { data } = await DeleteProduct({ id });
-//   if (!data) return new Error("Product not found");
-//   if (data.success) toast.success(data.success);
-//   if (data.error) toast.error(data.error);
-// }
 
 const ActionCell = ({ row }: { row: Row<productColumn> }) => {
   const { status, execute } = useAction(DeleteProduct, {
@@ -57,7 +43,11 @@ const ActionCell = ({ row }: { row: Row<productColumn> }) => {
       }
     },
     onExecute: () => {
-      toast.loading("Deleting Product", { duration: 200 });
+      const promise = () =>
+        new Promise<void>((resolve) => setTimeout(() => resolve(), 2000));
+      toast.promise(promise, {
+        loading: "Deleting variant...",
+      });
     },
   });
   const product = row.original;
@@ -117,52 +107,51 @@ export const columns: ColumnDef<productColumn>[] = [
   {
     accessorKey: "variants",
     header: "Variants",
-    // cell: ({ row }) => {
-    //   const variants = row.getValue("variants") as VariantsWithImagesTags[];
-    //   // console.log("VARIANTS:::", variants);
-    //   return (
-    //     <div>
-    //       {variants.map((variant) => (
-    //         <div key={variant.id}>
-    //           <TooltipProvider>
-    //             <Tooltip>
-    //               <TooltipTrigger asChild>
-    //                 <ProductVariant
-    //                   productID={variant.ProductId}
-    //                   variant={variant}
-    //                   editMode={true}
-    //                 >
-    //                   <div
-    //                     className="w-5 h-5 rounded-full"
-    //                     key={variant.id}
-    //                     style={{ background: variant.Color }}
-    //                   />
-    //                 </ProductVariant>
-    //               </TooltipTrigger>
-    //               <TooltipContent>
-    //                 <p>{variant.ProductType}</p>
-    //               </TooltipContent>
-    //             </Tooltip>
-    //           </TooltipProvider>
-    //         </div>
-    //       ))}
-    //       <TooltipProvider>
-    //         <Tooltip>
-    //           <TooltipTrigger asChild>
-    //             <span className="text-primary">
-    //               <ProductVariant productID={row.original.id} editMode={false}>
-    //                 <PlusCircle className="h-5 w-5" />
-    //               </ProductVariant>
-    //             </span>
-    //           </TooltipTrigger>
-    //           <TooltipContent>
-    //             <p>Create a new Variant</p>
-    //           </TooltipContent>
-    //         </Tooltip>
-    //       </TooltipProvider>
-    //     </div>
-    //   );
-    // },
+    cell: ({ row }) => {
+      const variants = row.getValue("variants") as VariantsWithImagesTags[];
+      return (
+        <div className="flex gap-2">
+          {variants.map((variant) => (
+            <div key={variant.id}>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <ProductVariant
+                      productID={variant.productID}
+                      variant={variant}
+                      editMode={true}
+                    >
+                      <div
+                        className="w-5 h-5 rounded-full"
+                        key={variant.id}
+                        style={{ background: variant.color }}
+                      />
+                    </ProductVariant>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{variant.productType}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+          ))}
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <span className="text-primary">
+                  <ProductVariant productID={row.original.id} editMode={false}>
+                    <PlusCircle className="h-5 w-5" />
+                  </ProductVariant>
+                </span>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Create a new Variant</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
+      );
+    },
   },
 
   {
