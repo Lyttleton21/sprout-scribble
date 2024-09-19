@@ -10,6 +10,6 @@ export default defineConfig({
   out: "./server/migrations",
   dialect: "postgresql",
   dbCredentials: {
-    url: process.env.POSTGRES_URL as string,
+    url: process.env.NEXT_PUBLIC_POSTGRES_URL as string,
   },
 })
