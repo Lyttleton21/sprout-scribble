@@ -15,6 +15,13 @@
       "when": 1726499059787,
       "tag": "0001_zippy_manta",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1726862901318,
+      "tag": "0002_marvelous_brood",
+      "breakpoints": true
     }
   ]
 }

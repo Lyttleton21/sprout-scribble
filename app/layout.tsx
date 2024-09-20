@@ -28,18 +28,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased px-6 md:px-24 max-w-7xl mx-auto `}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} `}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
-          <Nav />
-          <ToasterUi />
-          {children}
+          <div className="flex-grow px-6 md:px-12 mx-auto max-w-8xl">
+            <Nav />
+            <ToasterUi />
+            {children}
+          </div>
         </ThemeProvider>
       </body>
     </html>

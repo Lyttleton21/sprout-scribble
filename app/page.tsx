@@ -11,6 +11,8 @@ export default async function Home() {
     orderBy: (productVariants, { desc }) => [desc(productVariants.id)],
   });
 
+  if (!data) return "No Product Found";
+
   return (
     <main>
       <div>

@@ -37,7 +37,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
     },
   });
 
-  if (!variant) return null;
+  if (!variant) return "Variant not found";
   return (
     <main>
       <section className="flex flex-col lg:flex-row gap-4 lg: gap:12">
