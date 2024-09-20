@@ -37,6 +37,7 @@
     "crypto": "^1.0.1",
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.33.0",
+    "embla-carousel-react": "^8.3.0",
     "framer-motion": "^11.5.4",
     "input-otp": "^1.2.4",
     "lucide-react": "^0.441.0",
