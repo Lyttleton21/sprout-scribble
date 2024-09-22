@@ -10,6 +10,7 @@ import Reviews from "@/components/reviews/reviews";
 import { getReviewAverage } from "@/lib/review-average";
 import { Star } from "lucide-react";
 import Stars from "@/components/reviews/stars";
+import AddCart from "@/components/cart/AddCart";
 
 export async function generateStaticParams() {
   const data = await db.query.productVariants.findMany({
@@ -87,6 +88,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
               />
             ))}
           </div>
+          <AddCart />
         </div>
       </section>
       <Reviews ProductID={variant.productID} />
