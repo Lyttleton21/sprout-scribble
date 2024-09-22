@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { mountStoreDevtool } from 'simple-zustand-devtools';
+import CartItems from '@/components/cart/CartItems';
 
 export type Variant = {
     variantID: number,
@@ -17,6 +18,7 @@ export type CartItem ={
 export type CartState ={
     cart: CartItem[],
     addToCart: (item: CartItem) => void
+    removeFromCart: (item: CartItem) => void
 }
 
 export const useCartStore = create<CartState>((set) => ({
@@ -54,6 +56,21 @@ export const useCartStore = create<CartState>((set) => ({
                 ]
             }
         }
+    }),
+    removeFromCart: (item) => set((state) => {
+        const updateCart = state.cart.map((cartItem) => {
+            if(cartItem.variant.variantID === item.variant.variantID){
+                return{
+                    ...cartItem,
+                    variant :{
+                        ...cartItem.variant,
+                        quantity: cartItem.variant.quantity - 1,
+                    }
+                }
+            }
+            return cartItem;
+        });
+        return{cart: updateCart.filter((item) => item.variant.quantity > 0)}
     })
 }));
 
