@@ -52,7 +52,7 @@ export default function AddCart() {
             id: productID,
             variant: { variantID: id, quantity },
             image,
-            name: title + type,
+            name: title + " " + type,
             price,
           });
         }}

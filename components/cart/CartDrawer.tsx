@@ -38,11 +38,13 @@ export default function CartDrawer() {
           <ShoppingBag />
         </div>
       </DrawerTrigger>
-      <DrawerContent className="bg-white">
+      <DrawerContent className="bg-white min-h-50vh">
         <DrawerHeader>
-          <h2 className="text-center">Cart Stuff</h2>
+          <h2 className="text-center">Cart Progress</h2>
         </DrawerHeader>
-        <CartItems />
+        <div className="overflow-auto p-4">
+          <CartItems />
+        </div>
       </DrawerContent>
     </Drawer>
   );

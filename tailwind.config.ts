@@ -10,6 +10,12 @@ const config: Config = withUt ({
   ],
   theme: {
   	extend: {
+		maxWidth:{
+			'8xl': '88rem'
+		},
+		minHeight:{
+			'50vh': '50vh'
+		},
 		keyframes: {
 			"caret-blink": {
 			  "0%,70%,100%": { opacity: "1" },

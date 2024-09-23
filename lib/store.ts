@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { mountStoreDevtool } from 'simple-zustand-devtools';
-import CartItems from '@/components/cart/CartItems';
+import {persist} from 'zustand/middleware'
 
 export type Variant = {
     variantID: number,
@@ -21,7 +21,9 @@ export type CartState ={
     removeFromCart: (item: CartItem) => void
 }
 
-export const useCartStore = create<CartState>((set) => ({
+export const useCartStore = create<CartState>()(
+    persist(
+    (set) => ({
     cart: [],
     addToCart: (item) => set((state) => {
         const existingItem = state.cart.find((cartItem) => 
@@ -72,7 +74,8 @@ export const useCartStore = create<CartState>((set) => ({
         });
         return{cart: updateCart.filter((item) => item.variant.quantity > 0)}
     })
-}));
+}), {name: 'cart-storage'})
+);
 
 
 if (process.env.NODE_ENV === 'development') {
