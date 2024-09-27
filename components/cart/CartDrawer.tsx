@@ -15,14 +15,16 @@ import {
 } from "@/components/ui/drawer";
 import { AnimatePresence, motion } from "framer-motion";
 import CartItems from "./CartItems";
+import CartMessage from "./CartMessage";
 
 export default function CartDrawer() {
   const cart = useCartStore((s) => s.cart);
+  const checkoutProgress = useCartStore((s) => s.checkoutProgress);
 
   return (
     <Drawer>
       <DrawerTrigger>
-        <div className="relative px-2">
+        <section className="relative px-2">
           <AnimatePresence>
             {cart.length > 0 && (
               <motion.span
@@ -36,14 +38,14 @@ export default function CartDrawer() {
             )}
           </AnimatePresence>
           <ShoppingBag />
-        </div>
+        </section>
       </DrawerTrigger>
       <DrawerContent className="bg-white min-h-50vh">
         <DrawerHeader>
-          <h2 className="text-center">Cart Progress</h2>
+          <CartMessage />
         </DrawerHeader>
         <div className="overflow-auto p-4">
-          <CartItems />
+          {checkoutProgress === "cart-page" && <CartItems />}
         </div>
       </DrawerContent>
     </Drawer>
