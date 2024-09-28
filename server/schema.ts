@@ -226,4 +226,25 @@ export const orderProduct = pgTable('orderProduct', {
   quantity: integer('quantity').notNull(),
   productVariantsID: serial('productVariantsID').notNull().references(() => productVariants.id, {onDelete: 'cascade'}),
   productID: serial('productID').notNull().references(() => products.id, {onDelete: 'cascade'}),
-})
+  orderID: serial("orderID")
+    .notNull()
+    .references(() => orders.id, { onDelete: "cascade" }),
+});
+
+export const orderProductRelations = relations(orderProduct, ({ one }) => ({
+  order: one(orders, {
+    fields: [orderProduct.orderID],
+    references: [orders.id],
+    relationName: "orderProduct",
+  }),
+  product: one(products, {
+    fields: [orderProduct.productID],
+    references: [products.id],
+    relationName: "products",
+  }),
+  productVariants: one(productVariants, {
+    fields: [orderProduct.productVariantsID],
+    references: [productVariants.id],
+    relationName: "productVariants",
+  }),
+}))
