@@ -22,6 +22,7 @@ export default function PaymentForm({ totalPrice }: Props) {
   const stripe = useStripe();
   const elements = useElements();
   const cart = useCartStore((s) => s.cart);
+  const clearCart = useCartStore((s) => s.clearCart);
   const setCheckoutProgress = useCartStore((s) => s.setCheckoutProgress);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -35,7 +36,7 @@ export default function PaymentForm({ totalPrice }: Props) {
         setIsLoading(false);
         toast.success(data.success);
         setCheckoutProgress("confirmation-page");
-        // clearCart()
+        clearCart();
       }
     },
   });
