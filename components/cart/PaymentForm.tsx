@@ -10,6 +10,9 @@ import {
 import React, { useState } from "react";
 import { Button } from "../ui/button";
 import { CreatePaymentIntent } from "@/server/action/products/create-payment-intent";
+import { useAction } from "next-safe-action/hooks";
+import { createOrder } from "@/server/action/products/create-order";
+import { toast } from "sonner";
 
 interface Props {
   totalPrice: number;
@@ -19,8 +22,23 @@ export default function PaymentForm({ totalPrice }: Props) {
   const stripe = useStripe();
   const elements = useElements();
   const cart = useCartStore((s) => s.cart);
+  const setCheckoutProgress = useCartStore((s) => s.setCheckoutProgress);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
+
+  const { execute } = useAction(createOrder, {
+    onSuccess: (data) => {
+      if (data.error) {
+        toast.error(data.error);
+      }
+      if (data.success) {
+        setIsLoading(false);
+        toast.success(data.success);
+        setCheckoutProgress("confirmation-page");
+        // clearCart()
+      }
+    },
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -69,18 +87,16 @@ export default function PaymentForm({ totalPrice }: Props) {
         return;
       } else {
         setIsLoading(false);
-        console.log("Order Save!!!");
-
-        // execute({
-        //   status: "pending",
-        //   paymentIntentID: data.success.paymentIntentID,
-        //   total: totalPrice,
-        //   products: cart.map((item) => ({
-        //     productID: item.id,
-        //     variantID: item.variant.variantID,
-        //     quantity: item.variant.quantity,
-        //   })),
-        // })
+        execute({
+          status: "pending",
+          paymentIntentID: data.success.paymentIntentID,
+          total: totalPrice,
+          products: cart.map((item) => ({
+            productID: item.id,
+            variantID: item.variant.variantID,
+            quantity: item.variant.quantity,
+          })),
+        });
       }
     }
   };
@@ -89,8 +105,11 @@ export default function PaymentForm({ totalPrice }: Props) {
     <form onSubmit={handleSubmit}>
       <PaymentElement />
       <AddressElement options={{ mode: "shipping" }} />
-      <Button disabled={!stripe || !elements}>
-        <span>Pay Now</span>
+      <Button
+        className="my-4 w-full"
+        disabled={!stripe || !elements || isLoading}
+      >
+        {isLoading ? "Processing..." : "Pay now"}
       </Button>
     </form>
   );

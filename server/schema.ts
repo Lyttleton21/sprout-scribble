@@ -208,7 +208,7 @@ export const orders = pgTable('orders', {
   userID: text('userID').notNull().references(() => users.id, {onDelete: 'cascade'}),
   total: real('total').notNull(),
   status: text('status').notNull(),
-  created: timestamp('created').notNull(),
+  created: timestamp('created').defaultNow(),
   receiptURL: text('receiptURL')
 });
 

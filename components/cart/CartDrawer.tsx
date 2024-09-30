@@ -21,6 +21,7 @@ import Payment from "./Payment";
 export default function CartDrawer() {
   const cart = useCartStore((s) => s.cart);
   const checkoutProgress = useCartStore((s) => s.checkoutProgress);
+  const setCheckoutProgress = useCartStore((s) => s.setCheckoutProgress);
 
   return (
     <Drawer>
@@ -48,6 +49,11 @@ export default function CartDrawer() {
         <div className="overflow-auto p-4">
           {checkoutProgress === "cart-page" && <CartItems />}
           {checkoutProgress === "payment-page" && <Payment />}
+          {checkoutProgress === "confirmation-page" && (
+            <div onClick={() => setCheckoutProgress("payment-page")}>
+              Confirmation-Page
+            </div>
+          )}
         </div>
       </DrawerContent>
     </Drawer>
