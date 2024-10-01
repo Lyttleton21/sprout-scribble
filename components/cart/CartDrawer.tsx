@@ -23,9 +23,11 @@ export default function CartDrawer() {
   const cart = useCartStore((s) => s.cart);
   const checkoutProgress = useCartStore((s) => s.checkoutProgress);
   const setCheckoutProgress = useCartStore((s) => s.setCheckoutProgress);
+  const cartOpen = useCartStore((s) => s.cartOpen);
+  const setCartOpen = useCartStore((s) => s.setCartOpen);
 
   return (
-    <Drawer>
+    <Drawer open={cartOpen} onOpenChange={setCartOpen}>
       <DrawerTrigger>
         <section className="relative px-2">
           <AnimatePresence>

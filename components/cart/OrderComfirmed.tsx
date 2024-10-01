@@ -10,11 +10,18 @@ import OrderConfirmed from "../../public/order-confirmed.json";
 
 export default function OrderComfirmed() {
   const setCheckoutProgress = useCartStore((s) => s.setCheckoutProgress);
+  const setCartOpen = useCartStore((s) => s.setCartOpen);
+
   return (
     <div className="flex flex-col items-center gap-3">
       <h2 className="font-medium text-2xl">Thank you for your purchase!</h2>
       <Link href={"/dashboard/orders"}>
-        <Button onClick={() => setCheckoutProgress("cart-page")}>
+        <Button
+          onClick={() => {
+            setCartOpen(false);
+            setCheckoutProgress("cart-page");
+          }}
+        >
           View your order
         </Button>
       </Link>
