@@ -13,7 +13,7 @@ export default async function Reviews({ ProductID }: { ProductID: number }) {
     orderBy: [desc(reviews.created)],
   });
   return (
-    <section className="py-8">
+    <section className="py-4">
       <div className="flex gap-2 lg:gap-12 justify-stretch lg:flex-row flex-col">
         <div className="flex-1">
           <h2 className="text-2xl font-bold mb-4">Product Reviews</h2>

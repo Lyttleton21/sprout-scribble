@@ -1,16 +1,17 @@
+import AddCart from "@/components/cart/AddCart";
+import ProductPick from "@/components/products/ProductPick";
+import ProductShowCase from "@/components/products/ProductShowCase";
 import ProductType from "@/components/products/ProductType";
+import Reviews from "@/components/reviews/reviews";
+import Stars from "@/components/reviews/stars";
+import { Separator } from "@/components/ui/separator";
+import formatPrice from "@/lib/format-price";
+import { getReviewAverage } from "@/lib/review-average";
 import { db } from "@/server";
 import { productVariants } from "@/server/schema";
 import { eq } from "drizzle-orm";
-import { Separator } from "@/components/ui/separator";
-import formatPrice from "@/lib/format-price";
-import ProductPick from "@/components/products/ProductPick";
-import ProductShowCase from "@/components/products/ProductShowCase";
-import Reviews from "@/components/reviews/reviews";
-import { getReviewAverage } from "@/lib/review-average";
-import { Star } from "lucide-react";
-import Stars from "@/components/reviews/stars";
-import AddCart from "@/components/cart/AddCart";
+
+export const revalidate = 60;
 
 export async function generateStaticParams() {
   const data = await db.query.productVariants.findMany({
