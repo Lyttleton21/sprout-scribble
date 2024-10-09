@@ -1,34 +1,29 @@
 "use client";
 
-import { useFieldArray, useFormContext } from "react-hook-form";
-import * as z from "zod";
+import { UploadDropzone } from "@/app/api/uploadthing/upload";
+import { Button } from "@/components/ui/button";
 import {
-  Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { UploadDropzone } from "@/app/api/uploadthing/upload";
 import {
   Table,
-  TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import { Trash } from "lucide-react";
-import { Reorder } from "framer-motion";
-import { useState } from "react";
-import { Input } from "@/components/ui/input";
 import VariantSchema from "@/types/variant-schema";
+import { Reorder } from "framer-motion";
+import { Trash } from "lucide-react";
+import Image from "next/image";
+import { useState } from "react";
+import { useFieldArray, useFormContext } from "react-hook-form";
+import * as z from "zod";
 
 export default function VariantImages() {
   const { getValues, control, setError } =
@@ -47,7 +42,7 @@ export default function VariantImages() {
       <FormField
         control={control}
         name={"variantImages"}
-        render={({ field }) => (
+        render={() => (
           <FormItem>
             <FormLabel>Images</FormLabel>
             <FormControl>

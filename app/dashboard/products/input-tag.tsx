@@ -1,13 +1,12 @@
 "use client";
 
+import { Badge } from "@/components/ui/badge";
 import { Input, InputProps } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { AnimatePresence, motion } from "framer-motion";
+import { XIcon } from "lucide-react";
 import { Dispatch, SetStateAction, forwardRef, useState } from "react";
 import { useFormContext } from "react-hook-form";
-import { AnimatePresence, motion } from "framer-motion";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { XIcon } from "lucide-react";
 
 type InputTagsProps = InputProps & {
   value: string[];
@@ -15,7 +14,7 @@ type InputTagsProps = InputProps & {
 };
 
 export const InputTags = forwardRef<HTMLInputElement, InputTagsProps>(
-  ({ onChange, value, ...props }, ref) => {
+  ({ onChange, value, ...props }) => {
     const [pendingDataPoint, setPendingDataPoint] = useState("");
     const [focused, setFocused] = useState(false);
 
@@ -81,8 +80,8 @@ export const InputTags = forwardRef<HTMLInputElement, InputTagsProps>(
                 }
               }}
               value={pendingDataPoint}
-              onFocus={(e) => setFocused(true)}
-              onBlurCapture={(e) => setFocused(false)}
+              onFocus={() => setFocused(true)}
+              onBlurCapture={() => setFocused(false)}
               onChange={(e) => setPendingDataPoint(e.target.value)}
               {...props}
             />

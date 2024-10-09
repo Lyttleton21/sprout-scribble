@@ -1,18 +1,16 @@
 "use client";
 
-import { VariantsWithImagesTags } from "@/lib/infer-type";
-import React, { useEffect, useState } from "react";
 import {
   Carousel,
   CarouselApi,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/components/ui/carousel";
-import { useSearchParams } from "next/navigation";
-import Image from "next/image";
+import { VariantsWithImagesTags } from "@/lib/infer-type";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 interface Props {
   variants: VariantsWithImagesTags[];

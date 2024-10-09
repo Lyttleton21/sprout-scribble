@@ -2,7 +2,7 @@ import * as React from "react";
 
 interface EmailTemplateProps {
   name: string | null;
-  confirmLink: any;
+  confirmLink: string;
 }
 
 export const SendPasswordResetEmailTemplate: React.FC<

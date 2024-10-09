@@ -9,7 +9,7 @@ import { useTheme } from "next-themes";
 
 const stripe = getStripe();
 
-export default function payment() {
+export default function Payment() {
   const cart = useCartStore((s) => s.cart);
   const { theme } = useTheme();
 

@@ -3,21 +3,19 @@
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
-  TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
 import formatPrice from "@/lib/format-price";
 import { useCartStore } from "@/lib/store";
+import emptyBox from "@/public/empty-box.json";
+import { createId } from "@paralleldrive/cuid2";
+import { AnimatePresence, motion } from "framer-motion";
+import Lottie from "lottie-react";
 import { MinusCircle, PlusCircle } from "lucide-react";
 import Image from "next/image";
 import { useMemo } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import Lottie from "lottie-react";
-import emptyBox from "@/public/empty-box.json";
-import { createId } from "@paralleldrive/cuid2";
 import { Button } from "../ui/button";
 
 export default function CartItems() {

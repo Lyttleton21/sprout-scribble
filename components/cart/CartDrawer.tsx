@@ -1,28 +1,23 @@
 "use client";
 
-import { useCartStore } from "@/lib/store";
-import { ShoppingBag } from "lucide-react";
-import React from "react";
 import {
   Drawer,
-  DrawerClose,
   DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
   DrawerHeader,
-  DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
+import { useCartStore } from "@/lib/store";
 import { AnimatePresence, motion } from "framer-motion";
+import { ShoppingBag } from "lucide-react";
 import CartItems from "./CartItems";
 import CartMessage from "./CartMessage";
-import Payment from "./Payment";
 import OrderComfirmed from "./OrderComfirmed";
+import Payment from "./Payment";
 
 export default function CartDrawer() {
   const cart = useCartStore((s) => s.cart);
   const checkoutProgress = useCartStore((s) => s.checkoutProgress);
-  const setCheckoutProgress = useCartStore((s) => s.setCheckoutProgress);
+  // const setCheckoutProgress = useCartStore((s) => s.setCheckoutProgress);
   const cartOpen = useCartStore((s) => s.cartOpen);
   const setCartOpen = useCartStore((s) => s.setCartOpen);
 

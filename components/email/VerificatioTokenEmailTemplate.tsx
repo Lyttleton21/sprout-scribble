@@ -3,7 +3,7 @@ import { Button } from "../ui/button";
 
 interface EmailTemplateProps {
   name: string | null;
-  confirmLink: any;
+  confirmLink: string;
 }
 
 export const VerificationTokenEmailTemplate: React.FC<

@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { PasswordReset } from "@/server/action/auth/password-reset";
 import ResetPasswordSchema from "@/types/reset-password-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAction } from "next-safe-action/hooks";
@@ -21,13 +22,11 @@ import { Input } from "../ui/input";
 import AuthCard from "./AuthCard";
 import FormError from "./form-error";
 import FormSuccess from "./form-success";
-import { useRouter } from "next/navigation";
-import { PasswordReset } from "@/server/action/auth/password-reset";
 
 export const ResetPasswordForm = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const router = useRouter();
+  // const router = useRouter();
 
   const form = useForm<z.infer<typeof ResetPasswordSchema>>({
     resolver: zodResolver(ResetPasswordSchema),

@@ -1,18 +1,18 @@
 "use cilent";
 
 import { useCartStore } from "@/lib/store";
+import { createOrder } from "@/server/action/products/create-order";
+import { CreatePaymentIntent } from "@/server/action/products/create-payment-intent";
 import {
   AddressElement,
   PaymentElement,
   useElements,
   useStripe,
 } from "@stripe/react-stripe-js";
-import React, { useState } from "react";
-import { Button } from "../ui/button";
-import { CreatePaymentIntent } from "@/server/action/products/create-payment-intent";
 import { useAction } from "next-safe-action/hooks";
-import { createOrder } from "@/server/action/products/create-order";
+import React, { useState } from "react";
 import { toast } from "sonner";
+import { Button } from "../ui/button";
 
 interface Props {
   totalPrice: number;
@@ -101,6 +101,8 @@ export default function PaymentForm({ totalPrice }: Props) {
       }
     }
   };
+
+  console.log(errorMessage);
 
   return (
     <form onSubmit={handleSubmit}>

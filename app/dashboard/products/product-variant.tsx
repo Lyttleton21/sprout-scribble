@@ -34,7 +34,7 @@ import VariantImages from "./variant-image";
 type VariantProps = {
   children: React.ReactNode;
   editMode: boolean;
-  productID?: any;
+  productID?: number;
   variant?: VariantsWithImagesTags;
 };
 

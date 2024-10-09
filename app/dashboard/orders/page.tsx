@@ -1,27 +1,12 @@
-import { db } from "@/server";
-import { auth } from "@/server/auth";
-import { orderProduct, orders } from "@/server/schema";
-import { eq } from "drizzle-orm";
-import { redirect } from "next/navigation";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { formatDistance, subMinutes } from "date-fns";
 import {
   Dialog,
   DialogContent,
@@ -33,11 +18,25 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { MoreHorizontal } from "lucide-react";
-import { DropdownMenuContent } from "@radix-ui/react-dropdown-menu";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { db } from "@/server";
+import { auth } from "@/server/auth";
+import { orders } from "@/server/schema";
 import { DialogTitle } from "@radix-ui/react-dialog";
+import { DropdownMenuContent } from "@radix-ui/react-dropdown-menu";
+import { formatDistance, subMinutes } from "date-fns";
+import { eq } from "drizzle-orm";
+import { MoreHorizontal } from "lucide-react";
 import Image from "next/image";
+import { redirect } from "next/navigation";
 
 export default async function page() {
   const user = await auth();

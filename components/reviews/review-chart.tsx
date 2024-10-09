@@ -1,11 +1,10 @@
 "use client";
 
-import React, { useMemo } from "react";
-import { Card, CardDescription, CardTitle } from "../ui/card";
-import Stars from "./stars";
+import { Progress } from "@/components/ui/progress";
 import { ReviewsWithUser } from "@/lib/infer-type";
 import { getReviewAverage } from "@/lib/review-average";
-import { Progress } from "@/components/ui/progress";
+import { useMemo } from "react";
+import { Card, CardDescription, CardTitle } from "../ui/card";
 
 export default function ReviewChart({
   reviews,

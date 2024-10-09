@@ -15,7 +15,7 @@ interface product{
 const action = createSafeActionClient()
 
 export const createOrder = action(createOrderSchema, async ({  status, total, products, paymentIntentID}) => {
-    console.log(products);
+    // console.log(products);
     
     const user = await auth()
     if (!user) return { error: "user not found" }
@@ -29,7 +29,7 @@ export const createOrder = action(createOrderSchema, async ({  status, total, pr
         userID: user.user.id,
     }).returning();
 
-    const orderProducts = products.map(async ({quantity, productID, variantID}) => {
+    const orderProducts = products.map(async (quantity:number, productID:number, variantID:number) => {
         const newOrderProduct = await db.insert(orderProduct).values({
           quantity,
           orderID: order[0].id,
