@@ -14,7 +14,7 @@ interface product{
 
 const action = createSafeActionClient()
 
-export const createOrder = action(createOrderSchema, async ({  status, total, products}) => {
+export const createOrder = action(createOrderSchema, async ({  status, total, products, paymentIntentID}) => {
     console.log(products);
     
     const user = await auth()
@@ -24,6 +24,7 @@ export const createOrder = action(createOrderSchema, async ({  status, total, pr
       .insert(orders)
       .values({
         status,
+        paymentIntentID,
         total,
         userID: user.user.id,
     }).returning();

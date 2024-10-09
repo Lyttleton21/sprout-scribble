@@ -43,6 +43,13 @@
       "when": 1727584385428,
       "tag": "0005_clever_captain_flint",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1728183269512,
+      "tag": "0006_furry_bushwacker",
+      "breakpoints": true
     }
   ]
 }

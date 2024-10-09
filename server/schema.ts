@@ -209,7 +209,8 @@ export const orders = pgTable('orders', {
   total: real('total').notNull(),
   status: text('status').notNull(),
   created: timestamp('created').defaultNow(),
-  receiptURL: text('receiptURL')
+  receiptURL: text('receiptURL'),
+  paymentIntentID: text('paymentIntentID')
 });
 
 export const ordersRelations = relations(orders, ({one, many}) => ({
